@@ -1,6 +1,6 @@
 # JogoDeAdvinhação
 
-[https://imgur.com/I7YBsT0](https://imgur.com/I7YBsT0)
+https://imgur.com/I7YBsT0
 
 ## Introdução
 O melhor jogo de adivinhações, ACADEMIA DO PROGRAMADOR
