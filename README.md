@@ -1,7 +1,9 @@
 # JogoDeAdvinhação
 
-## Introdução
+[https://imgur.com/I7YBsT0](https://imgur.com/I7YBsT0)
 
+## Introdução
+O melhor jogo de adivinhações, ACADEMIA DO PROGRAMADOR
 ## funcionalidades
 - Estrutura básica e entrada do usuário
 - Gerar um número secreto aleatório
