@@ -1,96 +1,109 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace JogoDeAdvinhação.ConsoleApp
+﻿namespace JogoDeAdivinhacao.ConsoleApp1
 {
     internal class Program
     {
-        // Armazenar e exibir números já digitados
         static void Main(string[] args)
+
         {
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Jogo de adivinhação");
-            Console.WriteLine("-------------------------------------------");
-
-
-            //Lógica do jogo
-            Random geradorDeNumeros = new Random();
-            //variavel 
-            int[] memoria = new int[20];
+            string[] numerosChutados = new string[100];
             int contador = 0;
-            int numeroSecreto = geradorDeNumeros.Next(1, 21);
-            int numeroDigitado = 0;
-            int pontuacao = 1000;
-            while (numeroSecreto != numeroDigitado)
+
+            while (true)
             {
+                int totaldetentativas = 0;
 
+                string escolhaDeDificuldade = ExibirMensagem();
 
-                Console.Write("Digite um número de 1 à 20 para chutar: ");
-                numeroDigitado = Convert.ToInt32(Console.ReadLine());
-                //verifica se tem o numero digitado
-                if (memoria.Contains(numeroDigitado))
-                {
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine("Voce já usou essa tentativa!");
-                    Console.WriteLine("-------------------------------------------");
-                }
+                if (escolhaDeDificuldade == "1")
+                    totaldetentativas = 10;
+
+                else if (escolhaDeDificuldade == "2")
+                    totaldetentativas = 5;
+
                 else
+                    totaldetentativas = 3;
+
+                Random geradorDeNumeros = new Random();
+
+                int numeroSecreto = geradorDeNumeros.Next(1, 21);
+
+                for (int tentativa = 1; tentativa <= totaldetentativas; tentativa++)
                 {
+                    ExibirTentativa(tentativa, totaldetentativas);
 
-
-                    memoria[contador] = numeroDigitado;
-                    // variavel = numeroDigitado
-
-                    if (numeroDigitado == numeroSecreto)
+                    if (numerodigitado == numeroSecreto)
                     {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("Voce acertou!");
-                        Console.WriteLine("-------------------------------------------");
-                        Console.ReadLine();
+                        Console.WriteLine("--------------------------------------");
+                        Console.WriteLine("Parabéns, você acertou!");
+                        Console.WriteLine("--------------------------------------");
+                        break;
+                    }
+                    else if (tentativa == totaldetentativas)
+                    {
+                        Console.WriteLine("--------------------------------------");
+                        Console.WriteLine($"Que pena! Você usou todas as tentativas. O número era {numeroSecreto}.");
+                        Console.WriteLine("--------------------------------------");
+                        break;
+                    }
+                    else if (numerodigitado > numeroSecreto)
+                    {
+                        Console.WriteLine("--------------------------------------");
+                        Console.WriteLine("O número digitado foi maior que o número secreto!");
+                        Console.WriteLine("--------------------------------------");
+                    }
+                    else
+                    {
+                        Console.WriteLine("--------------------------------------");
+                        Console.WriteLine("O número digitado foi menor que o número secreto!");
+                        Console.WriteLine("--------------------------------------");
                     }
 
-                    else if (numeroDigitado > numeroSecreto)
-                    {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("O numero digitado foi maior que o numero secreto!");
-                        Console.WriteLine("-------------------------------------------");
-                        if (((numeroDigitado - numeroSecreto) / 2) > 0)
-                        {
-                            pontuacao = pontuacao - ((numeroDigitado - numeroSecreto) / 2);
-                        }
-                        else
-                        {
-                            pontuacao = pontuacao - (((numeroDigitado - numeroSecreto) / 2) * -1);
-                        }
-                    }
-                    else if (numeroDigitado < numeroSecreto)
-                    {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("O numero digitado foi menor que o numero secreto!");
-                        Console.WriteLine("-------------------------------------------");
-                        if (((numeroDigitado - numeroSecreto) / 2) > 0)
-                        {
-                            pontuacao = pontuacao - ((numeroDigitado - numeroSecreto) / 2);
-                        }
-                        else
-                        {
-                            pontuacao = pontuacao - (((numeroDigitado - numeroSecreto) / 2) * -1);
-                        }
-                    }
-                    //aumenta 1 no contador
-                    contador++;
-                    //ler a linha escolhida
-                    // Console.ReadLine();
+                    Console.WriteLine("Aperte ENTER para continuar...");
+                    Console.ReadLine();
                 }
+
+                Console.Write("Deseja continuar? (S/N): ");
+                string opcaoContinuar = Console.ReadLine().ToUpper();
+
+                if (opcaoContinuar != "S")
+                    break;
             }
-            Console.Clear();
-            for (int i = 0; i < memoria.Length; i++)
-            {
-                if (memoria [i] > 0)
-                Console.WriteLine("tentativa: " + (i + 1) +" - " + memoria[i]);
-            }
-            Console.WriteLine(pontuacao);
+
             Console.ReadLine();
 
+            static string ExibirMensagem()
+            {
+                Console.Clear();
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("Jogo De Adivinhação");
+                Console.WriteLine("--------------------------------------");
+
+                Console.WriteLine("Escolha um nível de dificuldade: ");
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("1 - facíl (10 tentativas)");
+                Console.WriteLine("2 - normal (5 tentativas)");
+                Console.WriteLine("3 - difícil (3 tentativas)");
+                Console.WriteLine("--------------------------------------");
+
+                Console.Write("Digite sua escolha: ");
+                string escolhaDeDificuldade = Console.ReadLine();
+
+                return escolhaDeDificuldade;
+            }
+
+            static void ExibirTentativa(int tentativa, int totaldetentativas)
+            {
+                Console.Clear();
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine($"Tentativa {tentativa} de {totaldetentativas}");
+                Console.WriteLine("--------------------------------------");
+
+                Console.Write("Digite um número (de 1 à 20) para chutar: ");
+                int numerodigitado = Convert.ToInt32(Console.ReadLine());
+
+
+            }
         }
+
     }
 }
