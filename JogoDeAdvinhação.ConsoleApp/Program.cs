@@ -13,14 +13,7 @@
 
             double pontuacao = 1000;
 
-            Console.WriteLine("\n--------------------------------------");
-            Console.WriteLine("        Jogo de Adivinhação", "\n");
-            Console.WriteLine($"\nPONTUAÇÃO: {pontuacao}", "\n");
-            Console.WriteLine("--------------------------------------");
-            Console.WriteLine(".........Nível de dificuldade.........", "\n");
-            Console.WriteLine("F - Fácil", "\n");
-            Console.WriteLine("M - Médio", "\n");
-            Console.WriteLine("D - Difícil", "\n");
+            exibirCabecalho(pontuacao, tentativas: 0);
 
             int tentativas;
             string nivelDificuldade = Console.ReadLine().ToUpper();
@@ -170,6 +163,12 @@
 
             }
         }
+
+    }
+    static void exibirCabecalho(double pontuacao, string nivelDificuldade = "", string historicoChutesJoin = "-", string historicoSorteadosJoin = "-", int tentativas = 0, int tentativasIniciais = 0)
+    {
+        Console.Clear();
+        Console.WriteLine("")
 
     }
 }
