@@ -1,96 +1,175 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace JogoDeAdvinhação.ConsoleApp
+﻿internal class Program
 {
-    internal class Program
+
+    static void Main(string[] args)
     {
-        // Armazenar e exibir números já digitados
-        static void Main(string[] args)
+
+        while (true)
         {
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Jogo de adivinhação");
-            Console.WriteLine("-------------------------------------------");
 
-
-            //Lógica do jogo
-            Random geradorDeNumeros = new Random();
-            //variavel 
-            int[] memoria = new int[20];
+            string[] numerosJaDigitados = new string[100];
+            string[] numerosJaSorteados = new string[10];
             int contador = 0;
-            int numeroSecreto = geradorDeNumeros.Next(1, 21);
-            int numeroDigitado = 0;
-            int pontuacao = 1000;
-            while (numeroSecreto != numeroDigitado)
+
+            double pontuacao = 1000;
+
+            Console.WriteLine("\n--------------------------------------");
+            Console.WriteLine("        Jogo de Adivinhação", "\n");
+            Console.WriteLine($"\nPONTUAÇÃO: {pontuacao}", "\n");
+            Console.WriteLine("--------------------------------------");
+            Console.WriteLine(".........Nível de dificuldade.........", "\n");
+            Console.WriteLine("F - Fácil", "\n");
+            Console.WriteLine("M - Médio", "\n");
+            Console.WriteLine("D - Difícil", "\n");
+
+            int tentativas;
+            string nivelDificuldade = Console.ReadLine().ToUpper();
+
+            if (nivelDificuldade == "F")
             {
-
-
-                Console.Write("Digite um número de 1 à 20 para chutar: ");
-                numeroDigitado = Convert.ToInt32(Console.ReadLine());
-                //verifica se tem o numero digitado
-                if (memoria.Contains(numeroDigitado))
-                {
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine("Voce já usou essa tentativa!");
-                    Console.WriteLine("-------------------------------------------");
-                }
-                else
-                {
-
-
-                    memoria[contador] = numeroDigitado;
-                    // variavel = numeroDigitado
-
-                    if (numeroDigitado == numeroSecreto)
-                    {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("Voce acertou!");
-                        Console.WriteLine("-------------------------------------------");
-                        Console.ReadLine();
-                    }
-
-                    else if (numeroDigitado > numeroSecreto)
-                    {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("O numero digitado foi maior que o numero secreto!");
-                        Console.WriteLine("-------------------------------------------");
-                        if (((numeroDigitado - numeroSecreto) / 2) > 0)
-                        {
-                            pontuacao = pontuacao - ((numeroDigitado - numeroSecreto) / 2);
-                        }
-                        else
-                        {
-                            pontuacao = pontuacao - (((numeroDigitado - numeroSecreto) / 2) * -1);
-                        }
-                    }
-                    else if (numeroDigitado < numeroSecreto)
-                    {
-                        Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("O numero digitado foi menor que o numero secreto!");
-                        Console.WriteLine("-------------------------------------------");
-                        if (((numeroDigitado - numeroSecreto) / 2) > 0)
-                        {
-                            pontuacao = pontuacao - ((numeroDigitado - numeroSecreto) / 2);
-                        }
-                        else
-                        {
-                            pontuacao = pontuacao - (((numeroDigitado - numeroSecreto) / 2) * -1);
-                        }
-                    }
-                    //aumenta 1 no contador
-                    contador++;
-                    //ler a linha escolhida
-                    // Console.ReadLine();
-                }
+                tentativas = 10;
             }
-            Console.Clear();
-            for (int i = 0; i < memoria.Length; i++)
+            else if (nivelDificuldade == "D")
             {
-                if (memoria [i] > 0)
-                Console.WriteLine("tentativa: " + (i + 1) +" - " + memoria[i]);
+                tentativas = 3;
             }
-            Console.WriteLine(pontuacao);
-            Console.ReadLine();
+            else
+            {
+                tentativas = 5;
+            }
 
+            while (tentativas > 0)
+            {
+                string historicoChutesJoin = string.Join(", ", numerosJaDigitados.Where(n => n != null));
+
+                Console.Clear();
+
+                Console.WriteLine("--------------------------------------");
+                Console.WriteLine("        Jogo de Adivinhação", "\n");
+                Console.WriteLine($"\nNÍVEL: {nivelDificuldade}", "\n");
+                Console.WriteLine($"HISTÓRICO DE CHUTES: {historicoChutesJoin}", "\t");
+
+                Console.WriteLine($"\nPONTUAÇÃO: {pontuacao}", "\n");
+                Console.WriteLine($"\nTENTATIVAS: {tentativas}", "\n");
+                Console.WriteLine("--------------------------------------");
+
+                Random geradorDeNumeros = new Random();
+                int numeroSorteado = geradorDeNumeros.Next(1, 21);
+                //Console.WriteLine($"\n Gabarito: {numeroSorteado}");
+                string historicoSorteadosJoin = string.Join(", ", numerosJaSorteados.Where(n => n != null));
+
+                Console.Write("Digite um número entre 1 e 20: ", " \n");
+                double numeroDigitadoInput = Convert.ToDouble(Console.ReadLine());
+
+
+                if (Array.Exists(numerosJaDigitados, n => n == numeroDigitadoInput.ToString()) & numeroDigitadoInput != numeroSorteado)
+                {
+                    Console.WriteLine($"\n{numeroDigitadoInput} já foi digitado, e é diferente do sorteado!", "\n");
+                    Console.Write("Digite [Enter] para continuar:");
+                    Console.ReadLine();
+                    continue;
+                }
+
+
+                numerosJaDigitados[contador] = Convert.ToString(numeroDigitadoInput);
+
+                numerosJaSorteados[contador] = Convert.ToString(numeroSorteado);
+                contador++;
+
+                double diferencaDigitadoESorteado = Math.Abs((numeroDigitadoInput - numeroSorteado) / 2);
+
+
+                if (numeroDigitadoInput == numeroSorteado)
+                {
+                    historicoChutesJoin = string.Join(", ", numerosJaDigitados.Where(n => n != null));
+                    historicoSorteadosJoin = string.Join(", ", numerosJaSorteados.Where(n => n != null));
+
+                    Console.Clear();
+                    Console.WriteLine("****************************************************");
+                    Console.WriteLine($"Parabéns, você acertou! O número sorteado foi {numeroSorteado}!");
+                    Console.WriteLine("****************************************************");
+                    Console.ReadLine();
+                    Console.Clear();
+
+                    Console.WriteLine("**************************************");
+                    Console.WriteLine("        Jogo de Adivinhação", "\n");
+                    Console.WriteLine($"\nNÍVEL: {nivelDificuldade}", "\n");
+                    Console.WriteLine($"HISTÓRICO DE CHUTES   : {historicoChutesJoin}", "\t");
+                    Console.WriteLine($"HISTÓRICO DE SORTEADOS: {historicoSorteadosJoin}", "\t");
+                    Console.WriteLine($"\nPONTUAÇÃO FINAL: {pontuacao}", "\n");
+                    Console.WriteLine($"\nTENTATIVAS RESTANTES: {tentativas - 1}", "\n");
+                    Console.WriteLine("**************************************");
+
+                    Console.Write("\nDeseja jogar novamente?[S/N]: ");
+                    string jogarNovamente = Console.ReadLine().ToUpper();
+
+                    if (jogarNovamente != "S")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        break;
+                    }
+
+                }
+
+                else if (numeroDigitadoInput < numeroSorteado)
+                {
+                    pontuacao -= diferencaDigitadoESorteado;
+
+                    tentativas--;
+                    Console.WriteLine($"\n{numeroDigitadoInput} é menor que o número sorteado! Perdeu {diferencaDigitadoESorteado} ponto(s).", "\n");
+                    Console.Write("Digite [Enter] para continuar:");
+                    Console.ReadLine();
+                }
+                else if (numeroDigitadoInput > numeroSorteado)
+                {
+                    pontuacao -= diferencaDigitadoESorteado;
+                    tentativas--;
+
+                    Console.WriteLine($"\n{numeroDigitadoInput} é maior que o número sorteado!  Perdeu {diferencaDigitadoESorteado} ponto(s).", "\n");
+                    Console.Write("Digite [Enter] para continuar:");
+                    Console.ReadLine();
+                }
+
+                if (tentativas == 0)
+                {
+                    historicoChutesJoin = string.Join(", ", numerosJaDigitados.Where(n => n != null));
+                    historicoSorteadosJoin = string.Join(", ", numerosJaSorteados.Where(n => n != null));
+
+                    Console.Clear();
+                    Console.WriteLine("-----------------------------------------------------------------------");
+                    Console.WriteLine("        Jogo de Adivinhação", "\n");
+                    Console.WriteLine($"\nSuas tentativas acabaram! O número sorteado da última rodada foi {numeroSorteado}.");
+                    Console.WriteLine($"\nNÍVEL: {nivelDificuldade}", "\n");
+                    Console.WriteLine($"HISTÓRICO DE CHUTES   : {historicoChutesJoin}", "\t");
+                    Console.WriteLine($"HISTÓRICO DE SORTEADOS: {historicoSorteadosJoin}", "\t");
+
+                    Console.WriteLine($"\nPONTUAÇÃO FINAL: {pontuacao}", "\n");
+                    Console.WriteLine("-----------------------------------------------------------------------");
+
+
+                    Console.Write("\nDeseja jogar novamente?[S/N]: ");
+                    string jogarNovamente = Console.ReadLine().ToUpper();
+
+                    if (jogarNovamente != "S")
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        break;
+                    }
+                }
+
+
+                Console.Write("Digite [Enter] para continuar:", "\n");
+
+            }
         }
+
     }
 }
